@@ -12,7 +12,7 @@ const questionRouter = require('./question.js');
 let app = express();
 
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(express.static('public'));
+app.use(express.static(path.resolve('./public')));
 
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
@@ -36,11 +36,6 @@ app.get('/', (request, response) => {
             });
         }
     );
-});
-
-// GET random question
-app.get('/', (req, res) => {
-    res.redirect('/question/random');
 });
 
 //upload new question

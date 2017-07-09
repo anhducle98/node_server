@@ -1,0 +1,4 @@
+{"_id":{"$oid":"59626e035a5ffb38b5ffd007"},"content":"Yes or No?","yes_count":13,"no_count":6,"__v":0}
+{"_id":{"$oid":"59626f235a5ffb38b5ffd008"},"content":"Male or Female?","yes_count":4,"no_count":3,"__v":0}
+{"_id":{"$oid":"59626f455a5ffb38b5ffd009"},"content":"Apple or Orange?","yes_count":2,"no_count":1,"__v":0}
+{"_id":{"$oid":"59627017dc53983baecc5b02"},"content":"Love yourself?","yes_count":3,"no_count":3,"__v":0}

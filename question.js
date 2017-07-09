@@ -6,22 +6,20 @@ const requestLib = require('request');
 let router = express.Router();
 
 router.get('/:id', (request, response) => {
-    console.log("GET question");
     requestLib.get(
         'http://localhost:8888/api/question/' + request.params.id,
         (err, res, body) => {
-            console.log("GET request completed");
             if (err) {
                 console.log("Cannot get from api");
                 response.send("ERROR");
                 return;
             }
             if (res.statusCode == 200) {
-                let o = JSON.parse(body);
+                let data = JSON.parse(body);
                 response.render('stats', {
-                    content: o["content"],
-                    yes_count: o["yes_count"],
-                    no_count: o["no_count"]
+                    content: data.content,
+                    yes_count: data.yes_count,
+                    no_count: data.no_count
                 });
             } else {
                 response.send("Cannot get question");

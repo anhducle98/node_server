@@ -1,0 +1,14 @@
+doctype html
+html
+    head
+        block css
+            link(rel='stylesheet', type='text/css', href='/css/bootstrap.min.css')
+            link(rel='stylesheet', type='text/css', href='/css/styles.css')
+        block title
+            title Default title
+    body
+        block askbutton
+            button.btn.btn-primary(onclick='location.href="/ask"') Ask
+        block bodycontent
+            |
+            

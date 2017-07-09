@@ -1,0 +1,10 @@
+extends layout.pug
+block title
+    title XXX
+block bodycontent
+    .center-screen
+        p.big-font #{content}
+        form.form-group(method='post', action='/api/answer')
+            textarea(style='display:none', name='id') #{id}
+            input.btn.btn-success(type='submit', name='answer', value='Yes')
+            input.btn.btn-danger(type='submit', name='answer', value='No')

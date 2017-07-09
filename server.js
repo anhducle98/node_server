@@ -2,7 +2,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const requestLib = require('request');
 const path = require('path');
-const exphbs  = require('express-handlebars');
+const pug = require('pug');
+const mongoose = require('mongoose');
+const config = require('./config.json');
 
 const PORT = 8888;
 
@@ -11,11 +13,19 @@ const questionRouter = require('./question.js');
 
 let app = express();
 
+mongoose.connect(config.dbpath, (err) => {
+    if (err) {
+        console.log(err);
+    } else {
+        console.log("Database server connected");
+    }
+});
+
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(path.resolve('./public')));
 
-app.engine('handlebars', exphbs({defaultLayout: 'main'}));
-app.set('view engine', 'handlebars');
+app.set('views', './views')
+app.set('view engine', 'pug');
 
 app.use('/api', apiRouter);
 app.use('/question', questionRouter);
@@ -29,10 +39,11 @@ app.get('/', (request, response) => {
                 response.send("ERROR");
                 return;
             }
-            let o = JSON.parse(body);
+            let data = JSON.parse(body);
+            console.log(body);
             response.render('index', {
-                content: o["content"],
-                id: o["id"]
+                content: data.content,
+                id: Buffer.from(data._id.toString(), 'ascii').toString('base64')
             });
         }
     );
@@ -40,7 +51,7 @@ app.get('/', (request, response) => {
 
 //upload new question
 app.get('/ask', (req, res) => {
-    res.sendFile(path.join(__dirname, '/public/question.html'));
+    res.render('question');
 });
 
 app.listen(PORT, () => {

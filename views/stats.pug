@@ -1,0 +1,18 @@
+extends layout.pug
+
+block title
+    Question
+
+block bodycontent
+    .center-screen
+        p.big-font #{content}
+        .progress
+            .progress-bar.progress-bar-success#yes-bar(role='progress-bar') #{yes_count}
+            .progress-bar.progress-bar-danger#no-bar(role='progress-bar') #{no_count}
+        button.btn.btn-primary(onclick='location.href="/"') Next question
+    script.
+        var a = #{yes_count};
+        var b = #{no_count};
+        var c = a + b;
+        document.getElementById('yes-bar').style.width = (100 * a / c) + "%";
+        document.getElementById('no-bar').style.width = (100 * b / c) + "%";

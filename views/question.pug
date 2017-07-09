@@ -1,0 +1,11 @@
+extends layout.pug
+
+block title
+    title Question
+block askbutton
+    |
+block bodycontent
+    form.form-group(method='post', action='/api/question')
+        label Question
+        input.form-control(type='text', name='question')
+        input.btn.btn-primary(type='submit', name='submit_button')

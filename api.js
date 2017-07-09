@@ -2,79 +2,68 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 
+const Question = require('./models/questionModel');
+
 let api = express.Router();
 
-let Utils = {
-    file_path: path.join(__dirname, 'questions_list.json'),
-    get_question_list: () => {
-        let file_path = path.join(__dirname, 'questions_list.json');
-        try {
-            var questionList = JSON.parse(fs.readFileSync(file_path, 'utf-8'));
-        } catch (err) {
-            console.log(err);
-            res.send("Sorry error happened");
-            return;
-        }
-        if (!questionList) questionList = [];
-        return questionList;
-    },
-    set_question_list: (questionList, callback) => {
-        fs.writeFile(Utils.file_path, JSON.stringify(questionList), (err) => {
-            if (err) {
-                console.log("Cannot writeFile");
-                console.log(err);
-            }
-            callback();
-        });
-    }
-};
-
 api.get('/question', (req, res) => {
-    let questionList = Utils.get_question_list();
-    if (questionList.length == 0) {
-        res.send("Sorry I don't have any questions :v");
-        return;
-    }
-    res.json(questionList[Math.floor(Math.random() * questionList.length)]);
+    Question.aggregate([{$sample: { size: 1 }}], (err, result) => {
+        if (err) {
+            console.log(err);
+            res.json({});
+        } else {
+            res.json(result[0]);
+        }
+    });
 });
 
 api.get('/question/:id', (req, res) => {
-    console.log("API received GET request");
-    let questionList = Utils.get_question_list();
-    if (questionList.length == 0) {
-        res.send("Sorry I don't have any questions :v");
-        return;
-    }
-    let id = req.params.id;
-    id %= questionList.length;
-    res.json(questionList[id]);
+    let id = Buffer.from(req.params.id, 'base64').toString('ascii');
+    Question.findById(id, (err, doc) => {
+        if (err) {
+            console.log(err);
+            res.json({});
+        } else {
+            res.json(doc);
+        }
+    });
 });
 
 api.post('/question', (req, res) => {
-    let questionList = Utils.get_question_list();
-    let new_question = {
+    let new_question = new Question({
         content: req.body.question,
         yes_count: 0,
         no_count: 0,
-        id: questionList.length
-    }
+    });
     console.log('new question = ', new_question);
-    questionList.push(new_question);
-    Utils.set_question_list(questionList, () => {
-        res.redirect('/question/' + new_question.id);
+    new_question.save((err) => {
+        if (err) {
+            console.log(err);
+            res.send('Error saving new question');
+        } else {
+            console.log('New question saved successfully');
+            res.redirect('/question/' + Buffer.from(new_question._id.toString(), 'ascii').toString('base64'));
+        }
     });
 });
 
 api.post('/answer', (req, res) => {
-    let questionList = Utils.get_question_list();
-    let id = req.body.id % questionList.length;
-    if (req.body.answer == "Yes") {
-        questionList[id].yes_count += 1;
-    } else {
-        questionList[id].no_count += 1;
-    }
-    Utils.set_question_list(questionList, () => {
-        res.redirect('/question/' + id);
+    let id = Buffer.from(req.body.id, 'base64').toString('ascii');
+    Question.findById(id, (err, doc) => {
+        if (req.body.answer == "Yes") {
+            doc.yes_count += 1;
+        } else {
+            doc.no_count += 1;
+        }
+        doc.save((err) => {
+            if (err) {
+                console.log('Answer cannot be saved');
+                res.send("Error sending answer");
+            } else {
+                console.log('Answer saved successfully');
+                res.redirect('/question/' + req.body.id);
+            }
+        });
     });
 });
 

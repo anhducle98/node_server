@@ -1,8 +1,8 @@
 # node_server
 
-Import sample database: $ mongoimport -d quyetde -c questions.json
-
 Run mongodb server: $ mongod
+
+Import sample database: $ mongoimport -d quyetde -c questions.json
 
 Run server: $ npm start
 

@@ -2,7 +2,7 @@
 
 Run mongodb server: $ mongod
 
-Import sample database: $ mongoimport -d quyetde -c questions.json
+Import sample database: $ mongoimport -d quyetde -c questions questions.json
 
 Run server: $ npm start
 

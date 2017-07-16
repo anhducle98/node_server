@@ -30,7 +30,7 @@ app.use('/question', questionRouter);
 
 app.get('/', (request, response) => {
     requestLib.get(
-        `http://localhost:${config.port}/api/question`,
+        `http://localhost:${process.env.PORT || config.port}/api/question`,
         (err, res, body) => {
             if (err || res.statusCode != 200) {
                 console.log(err);
@@ -52,11 +52,11 @@ app.get('/ask', (req, res) => {
     res.render('question');
 });
 
-app.listen(config.port, (err) => {
+app.listen(process.env.PORT || config.port, (err) => {
     console.log('here');
     if (err) {
         console.log(err);
         return;
     }
-    console.log("Server started on port ", config.port);
+    console.log("Server started on port ", process.env.PORT || config.port);
 });

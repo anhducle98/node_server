@@ -8,7 +8,7 @@ let router = express.Router();
 
 router.get('/:id', (request, response) => {
     requestLib.get(
-        `http://localhost:${config.port}/api/question/` + request.params.id,
+        `http://localhost:${process.env.PORT || config.port}/api/question/` + request.params.id,
         (err, res, body) => {
             if (err) {
                 console.log("Cannot get from api");

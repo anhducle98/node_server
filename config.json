@@ -1,3 +1,4 @@
 {
-    "dbpath": "mongodb://localhost/quyetde"
+    "dbpath": "mongodb://admin:admin@ds161162.mlab.com:61162/quyetde",
+    "port" : 8888
 }

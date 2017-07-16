@@ -2,12 +2,13 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const requestLib = require('request');
+const config = require('./config.json');
 
 let router = express.Router();
 
 router.get('/:id', (request, response) => {
     requestLib.get(
-        'http://localhost:8888/api/question/' + request.params.id,
+        `http://localhost:${config.port}/api/question/` + request.params.id,
         (err, res, body) => {
             if (err) {
                 console.log("Cannot get from api");

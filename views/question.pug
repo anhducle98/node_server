@@ -1,11 +1,15 @@
 extends layout.pug
 
 block title
-    title Question
-block askbutton
-    |
+    title Ask
+    
 block bodycontent
     form.form-group(method='post', action='/api/question')
         label Question
         input.form-control(type='text', name='question')
         input.btn.btn-primary(type='submit', name='submit_button')
+block navbuttons
+    li.active
+        a(href='/ask') Ask
+    li
+        a(href='/') Answer

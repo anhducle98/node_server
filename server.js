@@ -6,8 +6,6 @@ const pug = require('pug');
 const mongoose = require('mongoose');
 const config = require('./config.json');
 
-const PORT = 8888;
-
 const apiRouter = require('./api.js');
 const questionRouter = require('./question.js');
 
@@ -32,7 +30,7 @@ app.use('/question', questionRouter);
 
 app.get('/', (request, response) => {
     requestLib.get(
-        'http://localhost:8888/api/question',
+        `http://localhost:${config.port}/api/question`,
         (err, res, body) => {
             if (err || res.statusCode != 200) {
                 console.log(err);
@@ -54,6 +52,11 @@ app.get('/ask', (req, res) => {
     res.render('question');
 });
 
-app.listen(PORT, () => {
-    console.log("Server started on port ", PORT);
+app.listen(config.port, (err) => {
+    console.log('here');
+    if (err) {
+        console.log(err);
+        return;
+    }
+    console.log("Server started on port ", config.port);
 });
